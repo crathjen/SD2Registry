@@ -15,11 +15,31 @@
 			}
 			
 		});
+		
+		$("#newaccountBtn").click(function() {
+			var newaccount = $("#newaccountFrm").serialize();
+			$.ajax({
+				url: "/Registry/REST/NewAccount",
+				dataType: "json",
+				type: "POST",
+				data: newaccount
+			})
+		});
 	});
 </script>
 <title>Registry</title>
 </head>
 <body>
-	<div>cole was here</div>
+	<div id="newaccountDiv">
+		<form id="newaccountFrm">
+			<div>Account Name</div><input id="accountnameBox" name="accountnameBox" type="text"/>
+			<div>Password</div><input id="passwordBox" name="passwordBox" type="password"/>
+			<div>Email</div><input id="emailBox" name="emailBox" type="email"/>
+			<div>First Name</div><input id="firstnameBox" name="firstnameBox" type="text"/>
+			<div>Last Name</div><input id="lastnameBox" name="lastnameBox" type="text"/>
+			<div>Age</div><input id="ageBox" name="ageBox" type="number"/>
+			<div id="btnDiv"><button id="newaccountBtn">Submit</button></div>
+		</form>
+	</div>
 </body>
 </html>
