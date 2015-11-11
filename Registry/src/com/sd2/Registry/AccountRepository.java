@@ -1,9 +1,7 @@
-package com.sd2.Repository;
+package com.sd2.Registry;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.sd2.Registry.Account;
 
 
 	public interface AccountRepository extends JpaRepository<Account, Integer>{

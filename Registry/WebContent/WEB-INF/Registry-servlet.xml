@@ -26,9 +26,8 @@
 		<property name="prefix" value="" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-
-	<context:component-scan base-package="com.sd2.Registry, com.sd2.Repository"></context:component-scan>
 	<context:annotation-config></context:annotation-config>
+	<context:component-scan base-package="com.sd2.Registry"></context:component-scan>
 	<mvc:annotation-driven></mvc:annotation-driven>
 	<mvc:resources location="/CSS/" mapping="/resources/CSS/**"></mvc:resources>
 	<mvc:resources location="/images/" mapping="/resources/images/**"></mvc:resources>
