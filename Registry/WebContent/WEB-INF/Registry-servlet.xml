@@ -3,13 +3,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	xmlns:data="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
 	<context:component-scan base-package="com.sd2.Registry" />
+	<data:repositories base-package="com.sd2.repository"></data:repositories>
 
-	<bean id="EMF" name="EMF"
+	<bean id="entityManagerFactory" name="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="SD2Registry" />
 		<property name="jpaPropertyMap">
@@ -19,6 +22,9 @@
 		</property>
 	</bean>
 
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+		autowire="byType" />
+
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
@@ -27,7 +33,7 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	<context:annotation-config></context:annotation-config>
-	<context:component-scan base-package="com.sd2.Registry"></context:component-scan>
+	
 	<mvc:annotation-driven></mvc:annotation-driven>
 	<mvc:resources location="/resources/CSS/" mapping="/resources/CSS/**"></mvc:resources>
 	<mvc:resources location="/resources/images/" mapping="/resources/images/**"></mvc:resources>
