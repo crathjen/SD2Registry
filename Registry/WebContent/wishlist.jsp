@@ -61,8 +61,22 @@
 
 	</table>
 
-	<script type="text/javascript">
-		
-	</script>
+	<div id="wishListEdit" >
+		<label>Wish List Name: 
+			<input type="text" id="wishListName" name="wishListName" data-bind="value: wishListEdit.name" />
+		</label>
+	</div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+

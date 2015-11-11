@@ -11,31 +11,42 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sd2.repository.WishListRepository;
-
 @Controller
 public class WishListController {
 	
-//	EntityManagerFactory emf = Persistence.createEntityManagerFactory("SD2Registry");
-//	EntityManager em = emf.createEntityManager();
+	EntityManagerFactory emf = Persistence.createEntityManagerFactory("SD2Registry");
+	EntityManager em = emf.createEntityManager();
 	
-	
-	@Autowired
-	protected WishListRepository wishListRepository;
+//	@Autowired
+//	protected WishListRepository wishListRepository;
 	
 	@RequestMapping("/REST/wishLists")
 	@ResponseBody
 	public List<WishList> getUserWishlist(){
-		if (wishListRepository != null){
-			List<WishList> wishLists = wishListRepository.findAll();
-			System.out.println("using wishlistRepo");
-			return wishLists;
+//		if (wishListRepository != null){
+//			List<WishList> wishLists = wishListRepository.findAll();
+//			return wishLists;
+//		}
+//		else{
+//		System.out.println("wishListRepository is null");	
+//		}
+		
+		return em.createQuery("SELECT w from WishList w", WishList.class).getResultList();
+		
+		
+	}; 
+	
+	@RequestMapping("/REST/wishLists/save")
+	@ResponseBody
+	public int editUserWishlist(WishList listEdited) {
+
+		if (listEdited == null)
+		{
+			return 0;
 		}
-		else{
-		System.out.println("wishListRepository is null");	
-		}
-		return null;
-		//return em.createQuery("SELECT w from WishList w", WishList.class).getResultList();
+		WishList savedWishList = 
+		
+		return -1;
 		
 		
 	}; 

@@ -6,13 +6,31 @@ function WishList(id, name) {
 	
 	
 	this.editWishList = function() {
-		alert(self.id);
-		
+		wishListEdit.id = self.id;
+		wishListEdit.name(self.name());
+		console.log(wishListEdit.id);
 	}
+	
 	this.deleteWishList = function() {
 		alert(self.id);
 	}
+	
+	this.saveWishList = function() {
+		$.ajax({
+			url: "/Registry/REST/wishLists/save",
+			dataType: "json",
+			data: self,
+			success: function(data) {
+				console.log("success");
+				console.log(data);
+				if (data > 0) {
+					
+				}
+			}
+		});
+	}
 }
 
- var wishLists = ko.observableArray();
- 
+var wishLists = ko.observableArray();
+
+var wishListEdit = new WishList();
