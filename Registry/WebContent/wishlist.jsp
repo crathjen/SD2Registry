@@ -64,6 +64,7 @@
 	<div id="wishListEdit" >
 		<label>Wish List Name: 
 			<input type="text" id="wishListName" name="wishListName" data-bind="value: wishListEdit.name" />
+			<button id="btnSave" data-bind="click: wishListEdit.saveWishList" >Save</button>
 		</label>
 	</div>
 </body>

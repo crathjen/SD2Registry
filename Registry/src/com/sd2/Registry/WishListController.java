@@ -8,46 +8,52 @@ import javax.persistence.Persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.sd2.repository.AccountRepository;
+import com.sd2.repository.WishListRepository;
 
 @Controller
 public class WishListController {
 	
-	EntityManagerFactory emf = Persistence.createEntityManagerFactory("SD2Registry");
-	EntityManager em = emf.createEntityManager();
+//	EntityManagerFactory emf = Persistence.createEntityManagerFactory("SD2Registry");
+//	EntityManager em = emf.createEntityManager();
 	
-//	@Autowired
-//	protected WishListRepository wishListRepository;
+	@Autowired
+	protected WishListRepository wishListRepository;
+	
+	@Autowired
+	protected AccountRepository accountRepository;
 	
 	@RequestMapping("/REST/wishLists")
 	@ResponseBody
 	public List<WishList> getUserWishlist(){
-//		if (wishListRepository != null){
-//			List<WishList> wishLists = wishListRepository.findAll();
-//			return wishLists;
-//		}
-//		else{
-//		System.out.println("wishListRepository is null");	
-//		}
+		if (wishListRepository != null){
+			List<WishList> wishLists = wishListRepository.findAll();
+			return wishLists;
+		}
+		else{
+		System.out.println("wishListRepository is null");	
+		}
 		
-		return em.createQuery("SELECT w from WishList w", WishList.class).getResultList();
-		
+		//return em.createQuery("SELECT w from WishList w", WishList.class).getResultList();
+		return null;
 		
 	}; 
 	
-	@RequestMapping("/REST/wishLists/save")
+	@RequestMapping(value="/REST/wishLists/save", consumes="application/json")
 	@ResponseBody
-	public int editUserWishlist(WishList listEdited) {
+	public int editUserWishlist(@RequestBody WishList listEdited) {
 
 		if (listEdited == null)
 		{
-			return 0;
+			return -1;  //indicates error
 		}
-		WishList savedWishList = 
-		
-		return -1;
-		
+		Account account = accountRepository.getOne(1);
+		listEdited.setAccount(account);
+		return wishListRepository.save(listEdited).getId();
 		
 	}; 
 	

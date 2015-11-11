@@ -1,7 +1,7 @@
 function WishList(id, name) {
 	var self = this;
 	
-	this.id = id;
+	this.id = id || 0;
 	this.name = ko.observable(name || "");
 	
 	
@@ -16,15 +16,25 @@ function WishList(id, name) {
 	}
 	
 	this.saveWishList = function() {
+		var uploadData = ko.toJSON(self);
+		var lastId = self.id;
 		$.ajax({
+			headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
 			url: "/Registry/REST/wishLists/save",
 			dataType: "json",
-			data: self,
+			method: "POST",
+			data: uploadData,
 			success: function(data) {
 				console.log("success");
 				console.log(data);
-				if (data > 0) {
-					
+				if (data > 0) {	//successfully created/altered entity on server
+					if (lastId == 0) {
+						self.id = data;  //assign id to new wishlist
+						wishLists.push(self);
+					}
 				}
 			}
 		});
