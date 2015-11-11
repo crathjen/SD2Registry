@@ -15,17 +15,13 @@ public class Item_WishList {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@Column(name="wishlist_id")
 	private int wishlistId;
 	
 	@Column(name="item_id")
 	private int itemId;
-	
-	@ManyToOne
-	@JoinColumn(name = "account_id", nullable = false)
-	private Account account;
 	
 	private int priority;
 	
@@ -53,14 +49,6 @@ public class Item_WishList {
 
 	public void setItemId(int itemId) {
 		this.itemId = itemId;
-	}
-
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
 	}
 
 	public int getPriority() {

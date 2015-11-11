@@ -1,7 +1,5 @@
 package com.sd2.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sd2.Registry.WishList;

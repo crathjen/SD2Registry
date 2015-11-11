@@ -41,5 +41,9 @@
 			<div id="btnDiv"><button id="newaccountBtn">Submit</button></div>
 		</form>
 	</div>
+
+	<br/>
+	<a href="/Registry/wishlist.jsp">Show WishLists</a>
+	
 </body>
 </html>

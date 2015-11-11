@@ -5,7 +5,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
 <script src="/Registry/resources/js/wishlist.js" language="javascript"></script>
@@ -54,14 +53,14 @@
 		<tfoot>
 			<tr>
 				<td colspan="2">
-					<button name="newWishList">New Wish List</button>
+					<button id="newWishListButton" name="newWishList" >New Wish List</button>
 				</td>
 			</tr>
 		</tfoot>
 
 	</table>
 
-	<div id="wishListEdit" >
+	<div id="wishListEditDiv" class="sdHidden" style="display:none">
 		<label>Wish List Name: 
 			<input type="text" id="wishListName" name="wishListName" data-bind="value: wishListEdit.name" />
 			<button id="btnSave" data-bind="click: wishListEdit.saveWishList" >Save</button>

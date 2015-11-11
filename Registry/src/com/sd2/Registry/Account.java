@@ -26,9 +26,6 @@ public class Account {
 	private String email;
 	
 	@OneToMany(mappedBy = "account")
-	private List<Item_WishList> item_wishlists;
-	
-	@OneToMany(mappedBy = "account")
 	private List<WishList> wishlists;
 	
 	@Column(name = "first_name")

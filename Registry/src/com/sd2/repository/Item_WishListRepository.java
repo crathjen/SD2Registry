@@ -3,15 +3,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sd2.Registry.Account;
+import com.sd2.Registry.Item_WishList;
 
 
-public interface AccountRepository extends JpaRepository<Account, Integer>{
+public interface Item_WishListRepository extends JpaRepository<Item_WishList, Integer>{
 
     //this is where you write Spring Data Queries to be read and interpreted by Spring
-    
-    List<Account> findAccountByAccountName(String accountname);
-    List<Account> findAccountByAccountNameLike(String accountname);
+    List<Item_WishList> findItem_WishListByWishlistId(Integer wishListId);
     
 }
 
