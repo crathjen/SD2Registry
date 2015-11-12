@@ -11,10 +11,11 @@ function WishList(id, name) {
 		wishListEdit.id = self.id;
 		wishListEdit.name(self.name());
 		for(var j = 0; j < self.items().length; j++) {
-			wishListEdit.items()[j] = self.items()[j];
+			wishListEdit.items.push(self.items()[j]);
 		}
 		console.log(wishListEdit.id);
 		$("#wishListEditDiv").show();
+		$("#wishListAdmin").hide();
 	}
 	
 	this.deleteWishList = function() {
@@ -79,10 +80,11 @@ function WishList(id, name) {
 					//reset the self's properties after updating or creating a WishList
 					self.name("");
 					self.id=0;
-					self.items().removeAll();
+					self.items.removeAll();
 				}
 				
 				$("#wishListEditDiv").hide();
+				$("#wishListAdmin").show();
 			}
 		});
 	}
@@ -94,7 +96,19 @@ var inventory = ko.observableArray();
 var wishListEdit = new WishList();
 
 function addToWL(data, event) {
-	wishListEdit.items().push(data);
+	wishListEdit.items.push(data);
+}
+
+function removeFromWL(data, event) {
+	wishListEdit.items.remove(data);
+}
+
+function cancelWishListEdit(){
+	wishListEdit.id=0;
+	wishListEdit.name("");
+	wishListEdit.items.removeAll();
+	$("#wishListEditDiv").hide();
+	$("#wishListAdmin").show();
 }
 
 
@@ -103,7 +117,7 @@ $(document).ready(function() {
 	$("#newWishListButton").click(function(){
 		wishListEdit.id=0;
 		wishListEdit.name("");
-		wishListEdit.items().removeAll();
+		wishListEdit.items.removeAll();
 		$("#wishListEditDiv").show();
 	});
 	

@@ -47,14 +47,20 @@
 <title>User Wish List</title>
 
 <style>
-	div {
+	
+	#wishlistItemsTable, #inventoryTable{
+		padding: 2rem;
 		border: 1px solid black;
 		border-radius: 10px;
 		margin: 2rem;
+		height: 25rem;
+		width: 40%;
+		float: left;
 	}
 </style>
 </head>
 <body>
+	<div id ='wishListAdmin'>
 	<table>
 		<thead>
 			<tr>
@@ -64,10 +70,9 @@
 		</thead>
 		<tbody data-bind="foreach: wishLists">
 			<tr data-bind="attr: {'data-id': id}">
-				<td><span data-bind="text: name"></span></td>
+				<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, click: editWishList"></span></td>
 				<td>
-					<button data-bind="click: editWishList">Edit</button>
-					<button data-bind="click: deleteWishList">Delete</button>
+					<button style = "margin-left: 15rem;" data-bind="click: deleteWishList">Delete</button>
 				</td>
 			</tr>
 		</tbody>
@@ -79,16 +84,13 @@
 				</td>
 			</tr>
 		</tfoot>
-
 	</table>
-
+	</div>
 	<div id="wishListEditDiv" class="sdHidden" style="display: none">
-		<label>Wish List Name: <input type="text" id="wishListName"
-			name="wishListName" data-bind="value: wishListEdit.name" />
-			<button id="btnSave" data-bind="click: wishListEdit.saveWishList">Save</button>
-		</label>
+		
 
 		<div id="inventoryTable">
+		<label id = "invtTable">List Of Items</label>	
 			<table>
 				<thead>
 					<tr>
@@ -99,26 +101,20 @@
 				</thead>
 				<tbody data-bind="foreach: inventory">
 					<tr data-bind="attr: {'data-id': id}">
-						<td><span data-bind="text: name, event: { click: addToWL }" ></span></td>
+						<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, event: { click: addToWL }" ></span></td>
 						<td><span data-bind="text: price"></span></td>
 						<td><span data-bind="text: vendor"></span></td>
-						<td>
-<!-- 							<button data-bind="click: editWishList">Edit</button>
-							<button data-bind="click: deleteWishList">Delete</button> -->
-						</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
- 						<td colspan="2">
-							<button id="addItemsToWishList" name="addItemsToWishList">Commit All Changes</button>
-						</td>
-					</tr>
-				</tfoot>
 			</table>
 		</div>
 
 		<div id="wishlistItemsTable">
+		<label>Wish List Name: <input type="text" id="wishListName"
+			name="wishListName" data-bind="value: wishListEdit.name" />
+			<button id="btnSave" data-bind="click: wishListEdit.saveWishList">Save</button>
+			<button id = "btnCancel"  data-bind= "click: cancelWishListEdit">Cancel</button>
+		</label>
 			<table>
 				<thead>
 					<tr>
@@ -129,22 +125,13 @@
 				</thead>
 				<tbody data-bind="foreach: wishListEdit.items">
 					<tr data-bind="attr: {'data-id': id}">
-						<td><span data-bind="text: name, event: { click: removeFromWL }" ></span></td>
+						<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, event: { click: removeFromWL }" ></span></td>
 						<td><span data-bind="text: price"></span></td>
 						<td><span data-bind="text: vendor"></span></td>
 						<td>
-<!-- 							<button data-bind="click: editWishList">Edit</button>
-							<button data-bind="click: deleteWishList">Delete</button> -->
 						</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
- 						<td colspan="2">
-							<button id="addItemsToWishList" name="addItemsToWishList">Commit All Changes</button>
-						</td>
-					</tr>
-				</tfoot>
 			</table>
 		</div>
 	</div>
