@@ -1,5 +1,6 @@
 package com.sd2.Registry;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +46,15 @@ public class WishListController {
 	
 	@RequestMapping(value="/REST/wishLists/save", consumes="application/json")
 	@ResponseBody
-	public int editUserWishlist(@RequestBody WishList listEdited) {
+	public int editUserWishlist(@RequestBody WishList listEdited, Principal principal) {
 
 		if (listEdited == null)
 		{
 			return -1;  //indicates error
 		}
-		Account account = accountRepository.getOne(1);
-		listEdited.setAccount(account);
+		//Account account = accountRepository.getOne(1);
+		
+		listEdited.setAccount(accountRepository.findAccountByAccountName(principal.getName()).get(0));
 		return wishListRepository.save(listEdited).getId();
 		
 	}; 

@@ -67,18 +67,21 @@ function WishList(id, name) {
 					if (lastId == 0) {
 						//creating a new wish list from the data we get back and pushing to the array.
 						var returnedWishList = new WishList(data, self.name());
+						//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
 						wishLists.push(returnedWishList);
 					} else {
 						//updating an existing wishlist
 						for(var i = 0; i < wishLists().length; i++) {
 							if (data===wishLists()[i].id) {
 								wishLists()[i].name(self.name());
+								//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
+								
 								break;
 							}
 						}
 					}
 					//reset the self's properties after updating or creating a WishList
-					self.name("");
+					self.name(""); 
 					self.id=0;
 					self.items.removeAll();
 				}

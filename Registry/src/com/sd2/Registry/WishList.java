@@ -29,7 +29,7 @@ public class WishList {
 	@JoinColumn(name = "account_id", nullable = false)
 	private Account account;
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="item_wishlist", 
 	joinColumns = @JoinColumn(name = "wishlist_id", referencedColumnName="id"),
 	inverseJoinColumns= @JoinColumn(name = "item_id", referencedColumnName="id"))
