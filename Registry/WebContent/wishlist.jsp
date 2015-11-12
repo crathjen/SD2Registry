@@ -18,6 +18,10 @@
 			success : function(data) {
 				for (var i = 0; i < data.length; i++) {
 					var newWishList = new WishList(data[i].id, data[i].name);
+					//	populate items observable array with existing items in wishlist
+					for(var j = 0; j < data[i].items.length; j++) {
+						newWishList.items.push(data[i].items[j]);
+					}
 					wishLists.push(newWishList);
 				}
 
@@ -42,7 +46,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>User Wish List</title>
 
-
+<style>
+	div {
+		border: 1px solid black;
+		border-radius: 10px;
+		margin: 2rem;
+	}
+</style>
 </head>
 <body>
 	<table>
@@ -82,7 +92,6 @@
 			<table>
 				<thead>
 					<tr>
-						<th></th>
 						<th>Name</th>
 						<th>Price</th>
 						<th>Vendor</th>
@@ -90,8 +99,7 @@
 				</thead>
 				<tbody data-bind="foreach: inventory">
 					<tr data-bind="attr: {'data-id': id}">
-						<td></td>
-						<td><span data-bind="text: name"></span></td>
+						<td><span data-bind="text: name, event: { click: addToWL }" ></span></td>
 						<td><span data-bind="text: price"></span></td>
 						<td><span data-bind="text: vendor"></span></td>
 						<td>
@@ -102,16 +110,43 @@
 				</tbody>
 				<tfoot>
 					<tr>
-<!-- 						<td colspan="2">
-							<button id="newWishListButton" name="newWishList">New
-								Wish List</button>
-						</td> -->
+ 						<td colspan="2">
+							<button id="addItemsToWishList" name="addItemsToWishList">Commit All Changes</button>
+						</td>
 					</tr>
 				</tfoot>
 			</table>
 		</div>
 
-
+		<div id="wishlistItemsTable">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Price</th>
+						<th>Vendor</th>
+					</tr>
+				</thead>
+				<tbody data-bind="foreach: wishListEdit.items">
+					<tr data-bind="attr: {'data-id': id}">
+						<td><span data-bind="text: name, event: { click: removeFromWL }" ></span></td>
+						<td><span data-bind="text: price"></span></td>
+						<td><span data-bind="text: vendor"></span></td>
+						<td>
+<!-- 							<button data-bind="click: editWishList">Edit</button>
+							<button data-bind="click: deleteWishList">Delete</button> -->
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+ 						<td colspan="2">
+							<button id="addItemsToWishList" name="addItemsToWishList">Commit All Changes</button>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
 	</div>
 </body>
 </html>

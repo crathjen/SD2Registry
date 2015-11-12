@@ -3,12 +3,16 @@ function WishList(id, name) {
 	
 	this.id = id || 0;
 	this.name = ko.observable(name || "");
+	this.items = ko.observableArray();
 	
 	
 	this.editWishList = function() {
 		
 		wishListEdit.id = self.id;
 		wishListEdit.name(self.name());
+		for(var j = 0; j < self.items().length; j++) {
+			wishListEdit.items()[j] = self.items()[j];
+		}
 		console.log(wishListEdit.id);
 		$("#wishListEditDiv").show();
 	}
@@ -75,6 +79,7 @@ function WishList(id, name) {
 					//reset the self's properties after updating or creating a WishList
 					self.name("");
 					self.id=0;
+					self.items().removeAll();
 				}
 				
 				$("#wishListEditDiv").hide();
@@ -88,13 +93,20 @@ var inventory = ko.observableArray();
 
 var wishListEdit = new WishList();
 
+function addToWL(data, event) {
+	wishListEdit.items().push(data);
+}
+
+
 $(document).ready(function() {
 	
 	$("#newWishListButton").click(function(){
 		wishListEdit.id=0;
 		wishListEdit.name("");
+		wishListEdit.items().removeAll();
 		$("#wishListEditDiv").show();
 	});
 	
 	
 }); // end document.ready
+
