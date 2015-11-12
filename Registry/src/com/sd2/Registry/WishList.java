@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,10 +29,10 @@ public class WishList {
 	@JoinColumn(name = "account_id", nullable = false)
 	private Account account;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(name="item_wishlist", 
-	joinColumns = @JoinColumn(name = "item_id", referencedColumnName="id"),
-	inverseJoinColumns= @JoinColumn(name = "wishlist_id", referencedColumnName="id"))
+	joinColumns = @JoinColumn(name = "wishlist_id", referencedColumnName="id"),
+	inverseJoinColumns= @JoinColumn(name = "item_id", referencedColumnName="id"))
 	private List<Item> items;
 	
 	

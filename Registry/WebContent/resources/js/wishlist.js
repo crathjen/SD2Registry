@@ -84,6 +84,7 @@ function WishList(id, name) {
 }
 
 var wishLists = ko.observableArray();
+var inventory = ko.observableArray();
 
 var wishListEdit = new WishList();
 
