@@ -57,6 +57,7 @@
 		width: 40%;
 		float: left;
 	}
+	
 </style>
 </head>
 <body>
