@@ -1,6 +1,7 @@
 package com.sd2.Registry;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -29,6 +31,9 @@ public class Item {
 	
 	@ManyToMany(mappedBy="items", cascade = CascadeType.ALL)
 	private Collection<WishList> wishlists;
+	
+	@OneToMany(mappedBy="item")
+	private List<Item_WishList> zippers;
 	
 	@Lob
 	@Basic(fetch = FetchType.LAZY)

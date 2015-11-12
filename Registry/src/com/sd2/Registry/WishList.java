@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -32,6 +33,10 @@ public class WishList {
 	joinColumns = @JoinColumn(name = "item_id", referencedColumnName="id"),
 	inverseJoinColumns= @JoinColumn(name = "wishlist_id", referencedColumnName="id"))
 	private List<Item> items;
+	
+	
+	@OneToMany(mappedBy="wishList", cascade=CascadeType.REMOVE)
+	private List<Item_WishList> zippers;
 
 	public WishList() {
 		//no-arg constructor function

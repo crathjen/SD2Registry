@@ -66,8 +66,9 @@ public class WishListController {
 			return -1;  //indicates error
 		}
 		
-		List<Item_WishList> item_wishListsToDelete = item_WishListRepository.findItem_WishListByWishlistId(listToDelete.getId());
-		item_WishListRepository.delete(item_wishListsToDelete);
+		//List<Item_WishList> item_wishListsToDelete = item_WishListRepository.findItem_WishListByWishlistId(listToDelete.getId());
+		//item_WishListRepository.delete(item_wishListsToDelete);
+		
 		wishListRepository.delete(listToDelete.getId());
 		return 1;
 	}; 

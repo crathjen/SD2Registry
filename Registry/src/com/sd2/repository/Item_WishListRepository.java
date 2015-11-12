@@ -9,7 +9,7 @@ import com.sd2.Registry.Item_WishList;
 public interface Item_WishListRepository extends JpaRepository<Item_WishList, Integer>{
 
     //this is where you write Spring Data Queries to be read and interpreted by Spring
-    List<Item_WishList> findItem_WishListByWishlistId(Integer wishListId);
+    //List<Item_WishList> findItem_WishListByWishlistId(Integer wishListId);
     
 }
 

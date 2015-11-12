@@ -17,11 +17,20 @@ public class Item_WishList {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name="wishlist_id")
-	private int wishlistId;
+//	@Column(name="wishlist_id")
+//	private int wishlistId;
+//	
+//	@Column(name="item_id")
+//	private int itemId;
 	
-	@Column(name="item_id")
-	private int itemId;
+
+	@ManyToOne
+	@JoinColumn(name="item_id", nullable=false)
+	private Item item;
+	
+	@ManyToOne
+	@JoinColumn(name="wishlist_id", nullable=false)
+	private WishList wishList;
 	
 	private int priority;
 	
@@ -35,21 +44,21 @@ public class Item_WishList {
 		this.id = id;
 	}
 
-	public int getWishlistId() {
-		return wishlistId;
-	}
-
-	public void setWishlistId(int wishlistId) {
-		this.wishlistId = wishlistId;
-	}
-
-	public int getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
+//	public int getWishlistId() {
+//		return wishlistId;
+//	}
+//
+//	public void setWishlistId(int wishlistId) {
+//		this.wishlistId = wishlistId;
+//	}
+//
+//	public int getItemId() {
+//		return itemId;
+//	}
+//
+//	public void setItemId(int itemId) {
+//		this.itemId = itemId;
+//	}
 
 	public int getPriority() {
 		return priority;
