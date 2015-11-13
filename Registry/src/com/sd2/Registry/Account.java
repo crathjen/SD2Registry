@@ -40,10 +40,12 @@ public class Account implements UserDetails{
 	
 	private int age;
 
+	//in order to use AccountRepository, the mutator methods must correspond exactly to their field's data type (i.e., they must use Integer and not just int).
 	public Integer getId() {
 		return id;
 	}
 
+	//in order to use AccountRepository, the mutator methods must correspond exactly to their field's data type (i.e., they must use Integer and not just int).
 	public void setId(Integer id) {
 		this.id = id;
 	}

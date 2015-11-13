@@ -17,8 +17,7 @@
 	<tx:annotation-driven />
 	<context:annotation-config />
 
-	<bean id="entityManagerFactory" name="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<bean id="entityManagerFactory" name="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="SD2Registry" />
 		<property name="jpaPropertyMap">
 			<props>
@@ -36,19 +35,17 @@
 
 		<security:csrf disabled="true" />
 
-		<!-- <security:form-login default-target-url="/Registry" authentication-failure-handler-ref="myLoginFailureHandler" 
-			authentication-success-handler-ref="myLoginSuccessHandler"/> <security:logout 
-			success-handler-ref="myLogoutSuccessHandler"/> -->
+		<!-- <security:form-login default-target-url="/Registry" 
+			authentication-failure-handler-ref="myLoginFailureHandler" 
+			authentication-success-handler-ref="myLoginSuccessHandler"/> 
+			<security:logout success-handler-ref="myLogoutSuccessHandler"/> -->
 
-		<!--<security:form-login-->
-				<!--login-page="login.jsp"-->
-				<!--default-target-url="/wishlist.jsp" />-->
-
+		<!--<security:form-login login-page="login.jsp" default-target-url="/wishlist.jsp" /> -->
 		<!--<security:logout logout-success-url="/login.html" />-->
 
 		<security:form-login
 				login-page="/login"
-				default-target-url="/wishlist"
+				default-target-url="/wishlist.jsp"
 				authentication-failure-url="/login?error"
 				username-parameter="username"
 				password-parameter="password" />

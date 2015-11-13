@@ -43,11 +43,13 @@ public class WishList {
 		//no-arg constructor function
 	}
 	
-	public int getId() {
+	//in order to use WishListRepository, the mutator methods must correspond exactly to their field's data type (i.e., they must use Integer and not just int).
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	//in order to use WishListRepository, the mutator methods must correspond exactly to their field's data type (i.e., they must use Integer and not just int).
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

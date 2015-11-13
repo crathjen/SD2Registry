@@ -43,7 +43,7 @@
 	</div>
 
 	<br/>
-	<a href="/Registry/wishlist.jsp">Show WishLists</a>
+	<a href="/Registry/login.jsp">Back To Login</a>
 	
 </body>
 </html>

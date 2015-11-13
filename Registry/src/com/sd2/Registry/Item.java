@@ -29,9 +29,11 @@ public class Item {
 	
 	private String vendor;
 	
+	//direct many to many mapping, where we are reaching through the item_wishlist table to get the corresponding wishlists.
 	@ManyToMany(mappedBy="items", cascade = CascadeType.ALL)
 	private Collection<WishList> wishlists;
 	
+	//the many to many table itself.
 	@OneToMany(mappedBy="item")
 	private List<Item_WishList> zippers;
 	
@@ -45,11 +47,13 @@ public class Item {
 		//no arg constructor function
 	}
 	
-	public int getId() {
+	//in order to use ItemRepository, the mutator methods must correspond exactly to their field's data type (i.e., they must use Integer and not just int).
+	public Integer getId() {
 		return id;
 	}
-
-	public void setId(int id) {
+	
+	//in order to use ItemRepository, the mutator methods must correspond exactly to their field's data type (i.e., they must use Integer and not just int).
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

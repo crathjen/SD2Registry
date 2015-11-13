@@ -94,7 +94,6 @@ function WishList(id, name) {
 }
 
 
-
 var wishLists = ko.observableArray();
 var inventory = ko.observableArray();
 
@@ -116,16 +115,16 @@ function cancelWishListEdit(){
 	$("#wishListAdmin").show();
 }
 
-
-$(document).ready(function() {
-	
-	$("#newWishListButton").click(function(){
-		wishListEdit.id=0;
-		wishListEdit.name("");
-		wishListEdit.items.removeAll();
-		$("#wishListEditDiv").show();
-	});
-	
-	
-}); // end document.ready
+//
+//$(document).ready(function() {
+//	
+////	$("#newWishListButton").click(function(){
+////		wishListEdit.id=0;
+////		wishListEdit.name("");
+////		wishListEdit.items.removeAll();
+////		$("#wishListEditDiv").show();
+////	});
+//	
+//	
+//}); // end document.ready
 
