@@ -9,10 +9,11 @@
      http://www.springframework.org/schema/security/spring-security-4.0.xsd
      http://www.springframework.org/schema/context
      http://www.springframework.org/schema/context/spring-context-4.1.xsd
-          http://www.springframework.org/schema/tx
+	 http://www.springframework.org/schema/tx
      http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
      http://www.springframework.org/schema/mvc
      http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
+
 	<tx:annotation-driven />
 	<context:annotation-config />
 
@@ -26,36 +27,46 @@
 		</property>
 	</bean>
 
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
-		autowire="byType" />
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" autowire="byType" />
+
 	<security:http auto-config='true'>
 		<security:session-management>
-			<security:concurrency-control
-				max-sessions="1" />
+			<security:concurrency-control max-sessions="1" />
 		</security:session-management>
 
 		<security:csrf disabled="true" />
-		
 
 		<!-- <security:form-login default-target-url="/Registry" authentication-failure-handler-ref="myLoginFailureHandler" 
 			authentication-success-handler-ref="myLoginSuccessHandler"/> <security:logout 
 			success-handler-ref="myLogoutSuccessHandler"/> -->
+
+		<!--<security:form-login-->
+				<!--login-page="login.jsp"-->
+				<!--default-target-url="/wishlist.jsp" />-->
+
+		<!--<security:logout logout-success-url="/login.html" />-->
+
+		<security:form-login
+				login-page="/login"
+				default-target-url="/wishlist"
+				authentication-failure-url="/login?error"
+				username-parameter="username"
+				password-parameter="password" />
+
+		<security:logout logout-success-url="/login?logout" />
+
+		<security:intercept-url pattern="/createAccount" access="permitAll"/>
+		<security:intercept-url pattern="/login" access="permitAll"/>
 		<security:intercept-url pattern="/**" access="isAuthenticated()"/>
 	</security:http>
 
-	
-
 	<security:authentication-manager>
-		<security:authentication-provider
-			user-service-ref="UserService">
-
-		</security:authentication-provider>
+		<security:authentication-provider user-service-ref="UserService" />
 	</security:authentication-manager>
-	<!-- <bean id="myLoginFailureHandler" class="quotes.jpa.manipulation.LoginFailureHandler" 
-		/> <bean id="myLoginSuccessHandler" class="quotes.jpa.manipulation.LoginSuccessHandler" 
-		/> <bean id="myLogoutSuccessHandler" class="quotes.jpa.manipulation.LogoutHandler" 
-		/> -->
 
-	<bean name="UserService" class="com.sd2.repository.UserService"
-		autowire="byType"></bean>
+	<!--<bean id="myLoginFailureHandler" class="quotes.jpa.manipulation.LoginFailureHandler"/>
+		<bean id="myLoginSuccessHandler" class="quotes.jpa.manipulation.LoginSuccessHandler"/>
+		<bean id="myLogoutSuccessHandler" class="quotes.jpa.manipulation.LogoutHandler" /> -->
+
+	<bean name="UserService" class="com.sd2.repository.UserService" autowire="byType"></bean>
 </beans>
