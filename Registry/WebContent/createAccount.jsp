@@ -27,6 +27,7 @@
 		});
 	});
 </script>
+<link rel="stylesheet" type="css/text" href="/resources/css/registry.css"/>
 <title>Registry</title>
 </head>
 <body>

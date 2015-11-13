@@ -77,6 +77,7 @@
 	}
 	
 </style>
+<link rel="stylesheet" type="css/text" href="/resources/css/registry.css"/>
 </head>
 <body>
 
@@ -108,6 +109,31 @@
 			</tfoot>
 		</table>
 	</div>
+	
+	<!-- THE TABLE FOR PURCHASING OFF OF OTHERS WISHLIST -->
+	<div id ='wishListPurchases'>
+		<table>
+			<thead>
+				<tr>
+					<th>Wish List</th>
+					<th>Account Owner</th>
+					<th>Options</th>
+				</tr>
+			</thead>
+			<tbody data-bind="foreach: purchaseLists">
+				<tr data-bind="attr: {'data-id': id}">
+					<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, click: purchaseWishList"></span></td>
+					<td><span data-bind="text: account().accountName"></span></td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<!--  END OF PURCHASE-->
 	
 	<!-- CONTAINS THE TABLES FOR ALL INVENTORY AND INVENTORY OF THE EDITABLE WISHLIST YOU HAVE SELECTED -->
 	<div id="wishListEditDiv" style="display: none">
@@ -159,7 +185,38 @@
 				</tbody>
 			</table>
 		</div>
+		
+		
+		
 	</div>
+	
+	
+			<!-- TABLE CONTAINS ALL OF THE ITEMS THIS IS FOR PURCHASE -->
+		<div id="purchaselistItemsTable">
+			<span data-bind="text: wishListPurchase.name"></span>
+				<button id="btnPurch" data-bind="">Purchase</button>
+				<button id = "btnCancel"  data-bind= "">Cancel</button>
+			
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Price</th>
+						<th>Vendor</th>
+					</tr>
+				</thead>
+				<tbody data-bind="foreach: wishListPurchase.items">
+					<tr data-bind="attr: {'data-id': id}">
+					<!-- todo add style  -->
+						<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name" ></span></td>
+						<td><span data-bind="text: price"></span></td>
+						<td><span data-bind="text: vendor"></span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	
+
 	
 </body>
 </html>

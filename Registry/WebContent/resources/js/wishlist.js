@@ -20,6 +20,21 @@ function WishList(id, name) {
 		$("#wishListAdmin").hide();
 	}
 	
+	this.purchaseWishList = function() {
+		
+		wishListPurchase.id = self.id;
+		wishListPurchase.name(self.name());
+		for(var j = 0; j < self.items().length; j++) {
+			
+			//wishListPurchase.items.push(self.items()[j]);
+		}
+		wishListPurchase.account = self.account;
+		console.log(wishListPurchase.id);
+		$("#purchaselistItemsTable").show()
+		$("#wishListEditDiv").hide();
+		$("#wishListAdmin").hide();
+	}
+	
 	this.deleteWishList = function() {
 		var dataToDelete = ko.toJSON(self);
 		$.ajax({
@@ -106,8 +121,10 @@ function WishList(id, name) {
 
 var wishLists = ko.observableArray();
 var inventory = ko.observableArray();
+var purchaseLists = ko.observableArray();
 
 var wishListEdit = new WishList();
+var wishListPurchase = new WishList();
 
 function addToWL(data, event) {
 	wishListEdit.items.push(data);

@@ -1,0 +1,17 @@
+/*the registry css file*/
+
+	#wishlistItemsTable, #inventoryTable{
+		padding: 2rem;
+		border: 1px solid black;
+		border-radius: 10px;
+		margin: 2rem;
+		height: 25rem;
+		width: 40%;
+		float: left;
+	}
+	
+	.purchased {
+		color: #cccccc;
+		background-color: magenta;
+	}
+	

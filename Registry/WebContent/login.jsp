@@ -60,6 +60,7 @@
 	}
 	
 </style>
+<link rel="stylesheet" type="css/text" href="/resources/css/registry.css"/>
 </head>
 <body onload="document.f.username.focus();">
 <h3 id="headh3">Login with Username and Password</h3>
