@@ -4,6 +4,7 @@ function WishList(id, name) {
 	this.id = id || 0;
 	this.name = ko.observable(name || "");
 	this.items = ko.observableArray();
+	this.account = ko.observable({});
 	
 	
 	this.editWishList = function() {
@@ -13,6 +14,7 @@ function WishList(id, name) {
 		for(var j = 0; j < self.items().length; j++) {
 			wishListEdit.items.push(self.items()[j]);
 		}
+		wishListEdit.account = self.account;
 		console.log(wishListEdit.id);
 		$("#wishListEditDiv").show();
 		$("#wishListAdmin").hide();
@@ -68,6 +70,10 @@ function WishList(id, name) {
 						//creating a new wish list from the data we get back and pushing to the array.
 						var returnedWishList = new WishList(data, self.name());
 						//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
+						for(var i = 0; i < self.items().length; i++) {
+							returnedWishList.items.push(self.items()[i]);
+						}
+						returnedWishList.account(currentUser);
 						wishLists.push(returnedWishList);
 					} else {
 						//updating an existing wishlist
@@ -75,7 +81,11 @@ function WishList(id, name) {
 							if (data===wishLists()[i].id) {
 								wishLists()[i].name(self.name());
 								//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
-								
+								wishLists()[i].items.removeAll();
+								for(var j = 0; j < self.items().length; j++) {
+									wishLists()[i].items.push(self.items()[j]);
+								}
+								wishLists()[i].account(self.account());
 								break;
 							}
 						}

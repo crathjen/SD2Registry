@@ -9,10 +9,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
 <script src="/Registry/resources/js/wishlist.js" language="javascript"></script>
 <script type="text/javascript">
+	var currentUser;
 	
-	$(document).ready(function() {
-		
+	$(document).ready(function() {	
 		ko.applyBindings();
+		$.get("/Registry/REST/getUser", function(data) {
+			currentUser = data;	
+			console.log(data);
+		})
 		
 		// AJAX call to get all of the wishlists from the database when the page loads.
 		$.ajax({
@@ -25,6 +29,7 @@
 					for(var j = 0; j < data[i].items.length; j++) {
 						newWishList.items.push(data[i].items[j]);
 					}
+					newWishList.account(data[i].account);
 					wishLists.push(newWishList);
 				}
 
@@ -51,6 +56,7 @@
 			wishListEdit.id=0;
 			wishListEdit.name("");
 			wishListEdit.items.removeAll();
+			wishListEdit.account({});
 			$("#wishListEditDiv").show();
 			$("#wishListAdmin").hide();
 		});
@@ -80,12 +86,14 @@
 			<thead>
 				<tr>
 					<th>Wish List</th>
+					<th>Account Owner</th>
 					<th>Options</th>
 				</tr>
 			</thead>
 			<tbody data-bind="foreach: wishLists">
 				<tr data-bind="attr: {'data-id': id}">
 					<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, click: editWishList"></span></td>
+					<td><span data-bind="text: account().accountName"></span></td>
 					<td>
 						<button style = "margin-left: 15rem;" data-bind="click: deleteWishList">Delete</button>
 					</td>

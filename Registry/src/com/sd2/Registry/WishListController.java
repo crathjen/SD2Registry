@@ -55,7 +55,7 @@ public class WishListController {
 		
 		//lookup the Account using the accountName we got out of the java.security.Principal to set the WishList's owning Account
 		listEdited.setAccount(accountRepository.findAccountByAccountName(principal.getName()).get(0));
-		return wishListRepository.save(listEdited).getId();
+		return wishListRepository.saveAndFlush(listEdited).getId();
 		
 	}; 
 	
@@ -79,5 +79,12 @@ public class WishListController {
 		wishListRepository.delete(listToDelete.getId());
 		return 1;
 	}; 
+	
+	@RequestMapping(value="/REST/getUser")
+	@ResponseBody
+	public Account getUserForSession(Principal principal) {
+		
+		return accountRepository.findAccountByAccountName(principal.getName()).get(0);
+	}
 	
 }
