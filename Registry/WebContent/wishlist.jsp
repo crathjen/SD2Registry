@@ -77,7 +77,7 @@
 	}
 	
 </style>
-<link rel="stylesheet" type="css/text" href="/resources/css/registry.css"/>
+<link rel="stylesheet" type="css/text" href="/Registry/resources/CSS/registry.css"/>
 </head>
 <body>
 

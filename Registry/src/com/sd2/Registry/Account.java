@@ -1,5 +1,6 @@
 package com.sd2.Registry;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "account")
-public class Account implements UserDetails{	
+public class Account implements UserDetails, Serializable{	
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
