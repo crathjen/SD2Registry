@@ -7,33 +7,41 @@
 <title>User Wish List</title>
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
-<script src="/Registry/resources/js/wishlist.js" language="javascript"></script>
+<script src="/Registry/resources/js/wishlist.js"></script>
 <script type="text/javascript">
 	var currentUser;
 	
 	$(document).ready(function() {	
 		ko.applyBindings();
-		$.get("/Registry/REST/getUser", function(data) {
+		
+		var dfr = $.Deferred();
+	 	$.get("/Registry/REST/getUser", function(data) {
 			currentUser = data;	
 			console.log(data);
-		})
+			dfr.resolve();
+		});
 		
 		// AJAX call to get all of the wishlists from the database when the page loads.
 		$.ajax({
 			url : "/Registry/REST/wishLists",
 			dataType : "json",
 			success : function(data) {
-				for (var i = 0; i < data.length; i++) {
-					var newWishList = new WishList(data[i].id, data[i].name);
-					//	populate items observable array with existing items in wishlist
-					for(var j = 0; j < data[i].items.length; j++) {
-						newWishList.items.push(data[i].items[j]);
+				$.when(dfr).done(function(){
+					for (var i = 0; i < data.length; i++) {
+						var newWishList = new WishList(data[i].id, data[i].name);
+						//	populate items observable array with existing items in wishlist
+						for(var j = 0; j < data[i].items.length; j++) {
+							newWishList.items.push(data[i].items[j]);
+						}
+						newWishList.account(data[i].account);
+						
+						if(newWishList.account().accountName===currentUser.accountName)
+							myWishLists.push(newWishList);
+						else purchaseLists.push(newWishList);
 					}
-					newWishList.account(data[i].account);
-					wishLists.push(newWishList);
-				}
-
-				console.log(data);
+	
+					console.log(data);
+				})
 			}
 		})
 
@@ -53,10 +61,11 @@
 		// shows the wishlist editing tables, hides the 'admin' wishlists available to edit,
 		// and resets ViewModel wishListEdit to a fresh WishList
 		$("#newWishListButton").click(function(){
-			wishListEdit.id=0;
+			/* wishListEdit.id=0;
 			wishListEdit.name("");
 			wishListEdit.items.removeAll();
-			wishListEdit.account({});
+			wishListEdit.account({}); */
+			wishListEdit(new WishList());
 			$("#wishListEditDiv").show();
 			$("#wishListAdmin").hide();
 		});
@@ -64,19 +73,7 @@
 	}); //end $(document).ready
 </script>
 
-<style>
 
-	#wishlistItemsTable, #inventoryTable{
-		padding: 2rem;
-		border: 1px solid black;
-		border-radius: 10px;
-		margin: 2rem;
-		height: 25rem;
-		width: 40%;
-		float: left;
-	}
-	
-</style>
 <link rel="stylesheet" type="css/text" href="/Registry/resources/CSS/registry.css"/>
 </head>
 <body>
@@ -91,7 +88,7 @@
 					<th>Options</th>
 				</tr>
 			</thead>
-			<tbody data-bind="foreach: wishLists">
+			<tbody data-bind="foreach: myWishLists">
 				<tr data-bind="attr: {'data-id': id}">
 					<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, click: editWishList"></span></td>
 					<td><span data-bind="text: account().accountName"></span></td>
@@ -108,10 +105,8 @@
 				</tr>
 			</tfoot>
 		</table>
-	</div>
-	
-	<!-- THE TABLE FOR PURCHASING OFF OF OTHERS WISHLIST -->
-	<div id ='wishListPurchases'>
+		<!-- THE TABLE FOR PURCHASING OFF OF OTHERS WISHLIST -->
+		<div id ='purchaseLists'>
 		<table>
 			<thead>
 				<tr>
@@ -133,10 +128,14 @@
 			</tfoot>
 		</table>
 	</div>
-	<!--  END OF PURCHASE-->
+	</div>
+	
+
+
+
 	
 	<!-- CONTAINS THE TABLES FOR ALL INVENTORY AND INVENTORY OF THE EDITABLE WISHLIST YOU HAVE SELECTED -->
-	<div id="wishListEditDiv" style="display: none">
+	<div id="wishListEditDiv" hidden>
 		
 		<!-- TABLE CONTAINS ALL OF THE ITEMS IN THE DATABASE -->
 		<div id="inventoryTable">
@@ -162,9 +161,9 @@
 		<!-- TABLE CONTAINS ALL OF THE ITEMS IN THE SELECTED WISHLIST -->
 		<div id="wishlistItemsTable">
 			<label>Wish List Name: <input type="text" id="wishListName"
-				name="wishListName" data-bind="value: wishListEdit.name" />
-				<button id="btnSave" data-bind="click: wishListEdit.saveWishList">Save</button>
-				<button id = "btnCancel"  data-bind= "click: cancelWishListEdit">Cancel</button>
+				name="wishListName" data-bind="value: wishListEdit().name" />
+				<button id="btnSave" data-bind="click: wishListEdit().saveWishList">Save</button>
+				<button id = "btnCancelEdit"  data-bind= "click: cancelWishListEdit">Cancel</button>
 			</label>
 			<table>
 				<thead>
@@ -174,7 +173,7 @@
 						<th>Vendor</th>
 					</tr>
 				</thead>
-				<tbody data-bind="foreach: wishListEdit.items">
+				<tbody data-bind="foreach: wishListEdit().items">
 					<tr data-bind="attr: {'data-id': id}">
 						<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, event: { click: removeFromWL }" ></span></td>
 						<td><span data-bind="text: price"></span></td>
@@ -192,10 +191,9 @@
 	
 	
 			<!-- TABLE CONTAINS ALL OF THE ITEMS THIS IS FOR PURCHASE -->
-		<div id="purchaselistItemsTable">
-			<span data-bind="text: wishListPurchase.name"></span>
-				<button id="btnPurch" data-bind="">Purchase</button>
-				<button id = "btnCancel"  data-bind= "">Cancel</button>
+		<div id="purchaseListItemsTable" hidden>
+			<span data-bind="text: wishListPurchase().name"></span>
+			
 			
 			<table>
 				<thead>
@@ -205,7 +203,7 @@
 						<th>Vendor</th>
 					</tr>
 				</thead>
-				<tbody data-bind="foreach: wishListPurchase.items">
+				<tbody data-bind="foreach: wishListPurchase().items">
 					<tr data-bind="attr: {'data-id': id}">
 					<!-- todo add style  -->
 						<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name" ></span></td>
@@ -214,6 +212,8 @@
 					</tr>
 				</tbody>
 			</table>
+				<button id="btnPurch" data-bind="">Purchase</button>
+				<button id = "btnCancelPurchase"  data-bind= "click: cancelWishListPurchase">Cancel</button>
 		</div>
 	
 

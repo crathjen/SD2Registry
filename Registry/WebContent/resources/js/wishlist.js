@@ -8,29 +8,29 @@ function WishList(id, name) {
 	
 	
 	this.editWishList = function() {
-		
-		wishListEdit.id = self.id;
-		wishListEdit.name(self.name());
-		for(var j = 0; j < self.items().length; j++) {
-			wishListEdit.items.push(self.items()[j]);
-		}
-		wishListEdit.account = self.account;
-		console.log(wishListEdit.id);
+		wishListEdit(self);
+//		wishListEdit.id = self.id;
+//		wishListEdit.name(self.name());
+//		for(var j = 0; j < self.items().length; j++) {
+//			wishListEdit.items.push(self.items()[j]);
+//		}
+//		wishListEdit.account = self.account;
+		console.log(wishListEdit().id);
 		$("#wishListEditDiv").show();
 		$("#wishListAdmin").hide();
 	}
 	
 	this.purchaseWishList = function() {
-		
-		wishListPurchase.id = self.id;
-		wishListPurchase.name(self.name());
-		for(var j = 0; j < self.items().length; j++) {
-			
-			//wishListPurchase.items.push(self.items()[j]);
-		}
-		wishListPurchase.account = self.account;
-		console.log(wishListPurchase.id);
-		$("#purchaselistItemsTable").show()
+		wishListPurchase(self);
+//		wishListPurchase.id = self.id;
+//		wishListPurchase.name(self.name());
+//		for(var j = 0; j < self.items().length; j++) {
+//			
+//			//wishListPurchase.items.push(self.items()[j]);
+//		}
+//		wishListPurchase.account = self.account;
+		console.log(wishListPurchase().id);
+		$("#purchaseListItemsTable").show()
 		$("#wishListEditDiv").hide();
 		$("#wishListAdmin").hide();
 	}
@@ -51,13 +51,13 @@ function WishList(id, name) {
 					console.log("Something went wrong deleting wish list.")
 				} else {
 					var tmp = 0;
-					for (var i = 0; i < wishLists().length; i++) {
-						if (self.id===wishLists()[i].id) {
+					for (var i = 0; i < myWishLists().length; i++) {
+						if (self.id===myWishLists()[i].id) {
 							tmp = i;
 							break;
 						}
 					}
-					wishLists.splice(tmp, 1);
+					myWishLists.splice(tmp, 1);
 				}
 			},
 			error: function(status) {
@@ -89,18 +89,18 @@ function WishList(id, name) {
 							returnedWishList.items.push(self.items()[i]);
 						}
 						returnedWishList.account(currentUser);
-						wishLists.push(returnedWishList);
+						myWishLists.push(returnedWishList);
 					} else {
 						//updating an existing wishlist
 						for(var i = 0; i < wishLists().length; i++) {
 							if (data===wishLists()[i].id) {
 								wishLists()[i].name(self.name());
 								//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
-								wishLists()[i].items.removeAll();
+								myWishLists()[i].items.removeAll();
 								for(var j = 0; j < self.items().length; j++) {
-									wishLists()[i].items.push(self.items()[j]);
+									myWishLists()[i].items.push(self.items()[j]);
 								}
-								wishLists()[i].account(self.account());
+								myWishLists()[i].account(self.account());
 								break;
 							}
 						}
@@ -119,26 +119,31 @@ function WishList(id, name) {
 }
 
 
-var wishLists = ko.observableArray();
+var myWishLists = ko.observableArray();
 var inventory = ko.observableArray();
 var purchaseLists = ko.observableArray();
 
-var wishListEdit = new WishList();
-var wishListPurchase = new WishList();
+var wishListEdit = ko.observable(new WishList());
+var wishListPurchase = ko.observable(new WishList());
 
 function addToWL(data, event) {
-	wishListEdit.items.push(data);
+	wishListEdit().items.push(data);
 }
 
 function removeFromWL(data, event) {
-	wishListEdit.items.remove(data);
+	wishListEdit().items.remove(data);
 }
 
 function cancelWishListEdit(){
-	wishListEdit.id=0;
-	wishListEdit.name("");
-	wishListEdit.items.removeAll();
+	wishListEdit(new WishList());
+//	wishListEdit.id=0;
+//	wishListEdit.name("");
+//	wishListEdit.items.removeAll();
 	$("#wishListEditDiv").hide();
+	$("#wishListAdmin").show();
+}
+function cancelWishListPurchase(){
+	$("#purchaseListItemsTable").hide();
 	$("#wishListAdmin").show();
 }
 
