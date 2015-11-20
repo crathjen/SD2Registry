@@ -92,9 +92,9 @@ function WishList(id, name) {
 						myWishLists.push(returnedWishList);
 					} else {
 						//updating an existing wishlist
-						for(var i = 0; i < wishLists().length; i++) {
-							if (data===wishLists()[i].id) {
-								wishLists()[i].name(self.name());
+						for(var i = 0; i < myWishLists().length; i++) {
+							if (data === myWishLists()[i].id) {
+								myWishLists()[i].name(self.name());
 								//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
 								myWishLists()[i].items.removeAll();
 								for(var j = 0; j < self.items().length; j++) {
@@ -104,6 +104,7 @@ function WishList(id, name) {
 								break;
 							}
 						}
+						console.log(self);
 					}
 					//reset the self's properties after updating or creating a WishList
 					self.name(""); 
@@ -132,6 +133,16 @@ function addToWL(data, event) {
 
 function removeFromWL(data, event) {
 	wishListEdit().items.remove(data);
+}
+
+function checkWishListEditDuplicates(inventoryItem) {
+	console.log(inventoryItem.name);
+	for (var i = 0; i < wishListEdit().items().length; i += 1) {
+		if (inventoryItem.id === wishListEdit().items()[i].id){
+			return false;
+		}
+	}
+	return true;
 }
 
 function cancelWishListEdit(){

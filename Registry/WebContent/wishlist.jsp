@@ -149,8 +149,12 @@
 					</tr>
 				</thead>
 				<tbody data-bind="foreach: inventory">
-					<tr data-bind="attr: {'data-id': id}">
-						<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, event: { click: addToWL }, attr: {title: description}"></span></td>
+					<tr data-bind="attr: {'data-id': id}, if: checkWishListEditDuplicates($data)">
+						<td>
+							<span style = "cursor: pointer; display: inline-block;" 
+								  data-bind="text: name, event: { click: addToWL }, attr: {title: description}">
+							</span>
+						</td>
 						<td><span data-bind="text: price"></span></td>
 						<td><span data-bind="text: vendor"></span></td>
 					</tr>
