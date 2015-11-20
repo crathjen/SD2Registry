@@ -8,13 +8,13 @@ function WishList(id, name) {
 	
 	
 	this.editWishList = function() {
-		wishListEdit(self);
-//		wishListEdit.id = self.id;
-//		wishListEdit.name(self.name());
-//		for(var j = 0; j < self.items().length; j++) {
-//			wishListEdit.items.push(self.items()[j]);
-//		}
-//		wishListEdit.account = self.account;
+//		wishListEdit(self);
+		wishListEdit().id = self.id;
+		wishListEdit().name(self.name());
+		for(var j = 0; j < self.items().length; j++) {
+			wishListEdit().items.push(self.items()[j]);
+		}
+		wishListEdit().account = self.account;
 		console.log(wishListEdit().id);
 		$("#wishListEditDiv").show();
 		$("#wishListAdmin").hide();
@@ -69,6 +69,7 @@ function WishList(id, name) {
 	this.saveWishList = function() {
 		var uploadData = ko.toJSON(self);
 		var lastId = self.id;
+		console.log(self.id);
 		$.ajax({
 			headers: { 
                 'Accept': 'application/json',
@@ -81,7 +82,7 @@ function WishList(id, name) {
 			success: function(data) {
 				console.log("The id we got back is: " + data);
 				if (data > 0) {	//successfully created/altered entity on server
-					if (lastId == 0) {
+					if (lastId === 0) {
 						//creating a new wish list from the data we get back and pushing to the array.
 						var returnedWishList = new WishList(data, self.name());
 						//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
@@ -93,23 +94,27 @@ function WishList(id, name) {
 					} else {
 						//updating an existing wishlist
 						for(var i = 0; i < myWishLists().length; i++) {
+							console.log(myWishLists()[i].id);
 							if (data === myWishLists()[i].id) {
-								myWishLists()[i].name(self.name());
-								//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
-								myWishLists()[i].items.removeAll();
-								for(var j = 0; j < self.items().length; j++) {
-									myWishLists()[i].items.push(self.items()[j]);
-								}
-								myWishLists()[i].account(self.account());
+//								myWishLists()[i].name(self.name());
+//								//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
+//								myWishLists()[i].items.removeAll();
+//								for(var j = 0; j < self.items().length; j++) {
+//									myWishLists()[i].items.push(self.items()[j]);
+//								}
+//								myWishLists()[i].account(self.account());
+								myWishLists()[i]=self;
+								myWishLists.valueHasMutated();
 								break;
 							}
 						}
-						console.log(self);
+//						console.log(self);
 					}
+					wishListEdit(new WishList());
 					//reset the self's properties after updating or creating a WishList
-					self.name(""); 
-					self.id=0;
-					self.items.removeAll();
+//					self.name(""); 
+//					self.id=0;
+//					self.items.removeAll();
 				}
 				
 				$("#wishListEditDiv").hide();
@@ -136,7 +141,7 @@ function removeFromWL(data, event) {
 }
 
 function checkWishListEditDuplicates(inventoryItem) {
-	console.log(inventoryItem.name);
+	//console.log(inventoryItem.name);
 	for (var i = 0; i < wishListEdit().items().length; i += 1) {
 		if (inventoryItem.id === wishListEdit().items()[i].id){
 			return false;

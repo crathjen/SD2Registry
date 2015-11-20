@@ -7,6 +7,7 @@
 <title>User Wish List</title>
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="/Registry/resources/js/wishlist.js"></script>
 <script type="text/javascript">
 	var currentUser;
@@ -17,7 +18,7 @@
 		var dfr = $.Deferred();
 	 	$.get("/Registry/REST/getUser", function(data) {
 			currentUser = data;	
-			console.log(data);
+			//console.log(data);
 			dfr.resolve();
 		});
 		
@@ -40,7 +41,7 @@
 						else purchaseLists.push(newWishList);
 					}
 	
-					console.log(data);
+					//console.log(data);
 				})
 			}
 		})
@@ -53,7 +54,7 @@
 				for (var i = 0; i < data.length; i++) {
 					inventory.push(data[i]);
 				}
-				console.log(data);
+				//console.log(data);
 			}
 
 		})
@@ -65,16 +66,19 @@
 			wishListEdit.name("");
 			wishListEdit.items.removeAll();
 			wishListEdit.account({}); */
-			wishListEdit(new WishList());
-			$("#wishListEditDiv").show();
-			$("#wishListAdmin").hide();
+			$("#wishListEditDiv").dialog();
+			//wishListEdit(new WishList());
+			//$("#wishListEditDiv").show();
+			//$("#wishListAdmin").hide();
 		});
 		
 	}); //end $(document).ready
 </script>
 
 
+<link rel="stylesheet" type="css/text" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css"/>
 <link rel="stylesheet" type="css/text" href="/Registry/resources/CSS/registry.css"/>
+
 </head>
 <body>
 
