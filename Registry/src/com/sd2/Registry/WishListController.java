@@ -4,7 +4,9 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,6 +34,7 @@ public class WishListController {
 	public List<WishList> getUserWishlist(){
 		
 		if (wishListRepository != null) {
+			wishListRepository.emClear();
 			List<WishList> wishLists = wishListRepository.findAll();
 			return wishLists;
 		} else{
@@ -42,6 +45,7 @@ public class WishListController {
 	
 	// this method is the recipient of the WishList ViewModel's saveWishList method, 
 	// an AJAX call to BOTH save and update a WishList in the database.
+	@Transactional
 	@RequestMapping(value="/REST/wishLists/save", consumes="application/json")
 	@ResponseBody
 	public int editUserWishlist(
@@ -55,9 +59,24 @@ public class WishListController {
 		
 		//lookup the Account using the accountName we got out of the java.security.Principal to set the WishList's owning Account
 		listEdited.setAccount(accountRepository.findAccountByAccountName(principal.getName()).get(0));
-		return wishListRepository.saveAndFlush(listEdited).getId();
+		listEdited =wishListRepository.saveAndFlush(listEdited);
+//		listEdited=wishListRepository.emMerge(listEdited);
+//		System.out.println("success");
+//		wishListRepository.emRefresh(listEdited);
+//		wishListRepository.emClear();
+		return listEdited.getId();
 		
 	}; 
+	
+	@RequestMapping(value="/REST/wishLists/buy", consumes="application/json")
+	@ResponseBody
+	public void buyItems(@RequestBody WishList listEdited, Principal principal){
+//		System.out.println("in here");
+//		System.out.println(listEdited.getZippers().get(0).getItemId());
+//		System.out.println(listEdited.getZippers().get(0).getWishlistId());
+//		System.out.println(listEdited.getZippers().get(0).getPurchased());
+		wishListRepository.saveAndFlush(listEdited);
+	}
 	
 	// this method is the recipient of the WishList ViewModel's deleteWishList method, 
 	// an AJAX call to delete a WishList in the database. Returns 1 for successful delete, -1 for error.

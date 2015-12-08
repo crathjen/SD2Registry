@@ -30,10 +30,21 @@
 				$.when(dfr).done(function(){
 					for (var i = 0; i < data.length; i++) {
 						var newWishList = new WishList(data[i].id, data[i].name);
+						console.log(data[i])
 						//	populate items observable array with existing items in wishlist
 						for(var j = 0; j < data[i].items.length; j++) {
 							newWishList.items.push(data[i].items[j]);
+							
+							
+							
 						}
+						for(var j = 0; j < data[i].zippers.length; j++) {
+							newWishList.zippers.push(data[i].zippers[j]);
+							if (newWishList.zippers()[j].purchased===null)
+								newWishList.zippers()[j].purchased=false;
+							newWishList.zippers()[j].purchased=ko.observable(newWishList.zippers()[j].purchased)
+						}
+						
 						newWishList.account(data[i].account);
 						
 						if(newWishList.account().accountName===currentUser.accountName)
@@ -61,13 +72,63 @@
 		
 		// shows the wishlist editing tables, hides the 'admin' wishlists available to edit,
 		// and resets ViewModel wishListEdit to a fresh WishList
+		wsEditDialog=$("#wishListEditDiv").dialog({
+			title:"Edit Your Wishlist",
+			modal:true,
+			autoOpen: false,
+			width: 1025,
+			
+			buttons: [
+			          {
+			            text: "Save",
+			            click: function() {
+			            	wishListEdit().saveWishList();
+			            	console.log($(this))
+			              $( this ).dialog( "close" );
+			            }
+			          },
+			          {
+			            text: "Cancel",
+			            click: function() {
+			            	
+			              $( this ).dialog( "close" );
+			            }
+			          }
+			        ]
+			
+		});
+		
+		wsPurchaseDialog=$(purchaseListItemsTable).dialog({
+			title:"Buy something off of this WishList",
+			modal:true,
+			autoOpen: false,
+			
+			buttons: [
+			          {
+			            text: "Buy",
+			            click: function() {
+			            	wishListPurchase().buyItems();
+			              $( this ).dialog( "close" );
+			            }
+			          },
+			          {
+			            text: "Cancel",
+			            click: function() {
+			            	
+			              $( this ).dialog( "close" );
+			            }
+			          }
+			        ]
+		})
+		
 		$("#newWishListButton").click(function(){
 			/* wishListEdit.id=0;
 			wishListEdit.name("");
 			wishListEdit.items.removeAll();
 			wishListEdit.account({}); */
-			$("#wishListEditDiv").dialog();
-			//wishListEdit(new WishList());
+			
+			wsEditDialog.dialog("open");
+			wishListEdit(new WishList());
 			//$("#wishListEditDiv").show();
 			//$("#wishListAdmin").hide();
 		});
@@ -93,8 +154,8 @@
 				</tr>
 			</thead>
 			<tbody data-bind="foreach: myWishLists">
-				<tr data-bind="attr: {'data-id': id}">
-					<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name, click: editWishList"></span></td>
+				<tr data-bind="attr: {'data-id': id}, click: editWishList">
+					<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name"></span></td>
 					<td><span data-bind="text: account().accountName"></span></td>
 					<td>
 						<button style = "margin-left: 15rem;" data-bind="click: deleteWishList">Delete</button>
@@ -142,7 +203,9 @@
 	<div id="wishListEditDiv" hidden>
 		
 		<!-- TABLE CONTAINS ALL OF THE ITEMS IN THE DATABASE -->
+		<div>Click an inventory item to add it to your wishlist.  Click an item on your wishlist to remove it.  You may also change the name of your wishlist by editing the text field. </div>
 		<div id="inventoryTable">
+		<h3>INVENTORY</h3>
 			<label id = "invtTable">List Of Items</label>	
 			<table>
 				<thead>
@@ -168,10 +231,10 @@
 
 		<!-- TABLE CONTAINS ALL OF THE ITEMS IN THE SELECTED WISHLIST -->
 		<div id="wishlistItemsTable">
+			<h3>YOUR WISHLIST</h3>
 			<label>Wish List Name: <input type="text" id="wishListName"
 				name="wishListName" data-bind="value: wishListEdit().name" />
-				<button id="btnSave" data-bind="click: wishListEdit().saveWishList">Save</button>
-				<button id = "btnCancelEdit"  data-bind= "click: cancelWishListEdit">Cancel</button>
+
 			</label>
 			<table>
 				<thead>
@@ -212,16 +275,19 @@
 					</tr>
 				</thead>
 				<tbody data-bind="foreach: wishListPurchase().items">
-					<tr data-bind="attr: {'data-id': id}">
+					<tr data-bind="attr: {	'data-id': id,
+											'buyable': !(wishListFromID(wishListPurchase().id).zipperForItem(id)())? null:'false',
+											'title': !(wishListFromID(wishListPurchase().id).zipperForItem(id)())? null:'that item has already been purchased'	
+															}">
 					<!-- todo add style  -->
+						<td data-bind="if: !(wishListFromID(wishListPurchase().id).zipperForItem(id)())"><input type="checkbox" data-bind="checked: wishListPurchase().zipperForItem(id)"></td>
 						<td><span style = "cursor: pointer; display: inline-block;" data-bind="text: name" ></span></td>
 						<td><span data-bind="text: price"></span></td>
 						<td><span data-bind="text: vendor"></span></td>
 					</tr>
 				</tbody>
 			</table>
-				<button id="btnPurch" data-bind="">Purchase</button>
-				<button id = "btnCancelPurchase"  data-bind= "click: cancelWishListPurchase">Cancel</button>
+				
 		</div>
 	
 

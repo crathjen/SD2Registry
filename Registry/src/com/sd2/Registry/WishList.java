@@ -29,14 +29,24 @@ public class WishList {
 	@JoinColumn(name = "account_id", nullable = false)
 	private Account account;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER )
 	@JoinTable(name="item_wishlist", 
 	joinColumns = @JoinColumn(name = "wishlist_id", referencedColumnName="id"),
 	inverseJoinColumns= @JoinColumn(name = "item_id", referencedColumnName="id"))
 	private List<Item> items;
 	
 	
-	@OneToMany(mappedBy="wishList", cascade=CascadeType.REMOVE)
+	
+	
+	public List<Item_WishList> getZippers() {
+		return zippers;
+	}
+
+	public void setZippers(List<Item_WishList> zippers) {
+		this.zippers = zippers;
+	}
+
+	@OneToMany(mappedBy="wishList", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Item_WishList> zippers;
 
 	public WishList() {

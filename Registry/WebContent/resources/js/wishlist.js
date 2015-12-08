@@ -5,37 +5,56 @@ function WishList(id, name) {
 	this.name = ko.observable(name || "");
 	this.items = ko.observableArray();
 	this.account = ko.observable({});
+	this.zippers = ko.observableArray();
 	
 	
 	this.editWishList = function() {
 //		wishListEdit(self);
-		wishListEdit().id = self.id;
-		wishListEdit().name(self.name());
+		var templist = new WishList(self.id, self.name());
+		
+//		wishListEdit(new WishList());
+//		wishListEdit().id = self.id;
+//		wishListEdit().name(self.name());
 		for(var j = 0; j < self.items().length; j++) {
-			wishListEdit().items.push(self.items()[j]);
+			templist.items.push(self.items()[j]);
 		}
-		wishListEdit().account = self.account;
+		for(var j = 0; j < self.zippers().length; j++) {
+			templist.zippers.push(self.zippers()[j]);
+		}
+		templist.account(self.account());
+		wishListEdit(templist);
 		console.log(wishListEdit().id);
-		$("#wishListEditDiv").show();
-		$("#wishListAdmin").hide();
+//		$("#wishListEditDiv").show();
+//		$("#wishListAdmin").hide();
+		wsEditDialog.dialog("open")
 	}
 	
 	this.purchaseWishList = function() {
-		wishListPurchase(self);
-//		wishListPurchase.id = self.id;
-//		wishListPurchase.name(self.name());
-//		for(var j = 0; j < self.items().length; j++) {
-//			
-//			//wishListPurchase.items.push(self.items()[j]);
-//		}
-//		wishListPurchase.account = self.account;
-		console.log(wishListPurchase().id);
-		$("#purchaseListItemsTable").show()
-		$("#wishListEditDiv").hide();
-		$("#wishListAdmin").hide();
+		
+		var templist=new WishList(self.id, self.name());
+//		wishListPurchase().id = self.id;
+//		wishListPurchase().name(self.name());
+		for(var j = 0; j < self.items().length; j++) {
+			templist.items.push(self.items()[j]);
+		}
+		for(var j = 0; j < self.zippers().length; j++) {
+			var tempzip = JSON.parse(ko.toJSON(self.zippers()[j]));
+			tempzip.purchased=ko.observable(tempzip.purchased);
+			
+			templist.zippers.push(tempzip);
+		}
+		templist.account(self.account());
+		wishListPurchase(templist);
+		wsPurchaseDialog.dialog("open");
+		
+//		console.log(wishListPurchase().id);
+//		$("#purchaseListItemsTable").show()
+//		$("#wishListEditDiv").hide();
+//		$("#wishListAdmin").hide();
 	}
 	
-	this.deleteWishList = function() {
+	this.deleteWishList = function(wl,evt) {
+		evt.stopPropagation();
 		var dataToDelete = ko.toJSON(self);
 		$.ajax({
 			headers: { 
@@ -64,12 +83,29 @@ function WishList(id, name) {
 				console.log("Error, status: " + status);
 			}
 		});
+		return false;
 	}
 	
 	this.saveWishList = function() {
+//		for (var i = 0; i<self.items().length;i++){
+//			var found=false;
+//			for (var z=0;z<self.zippers().length;z++){
+//				if (self.zippers()[z].itemId===self.items()[i].id){
+//					found=true;
+//					break;
+//				}
+//			}
+//			if (!found){
+//				self.zippers.push({
+//					itemId: self.items()[i].id,
+//					wishlistId: self.id,
+//					purchased: ko.observable(false)
+//				})
+//			}
+//		}
 		var uploadData = ko.toJSON(self);
 		var lastId = self.id;
-		console.log(self.id);
+		console.log(self.name);
 		$.ajax({
 			headers: { 
                 'Accept': 'application/json',
@@ -88,6 +124,9 @@ function WishList(id, name) {
 						//WE NEED TO LOOP THROUGH THE ITEMS LIST HERE
 						for(var i = 0; i < self.items().length; i++) {
 							returnedWishList.items.push(self.items()[i]);
+						}
+						for(var i = 0; i < self.zippers().length; i++) {
+							returnedWishList.zippers.push(self.zippers()[i]);
 						}
 						returnedWishList.account(currentUser);
 						myWishLists.push(returnedWishList);
@@ -110,17 +149,61 @@ function WishList(id, name) {
 						}
 //						console.log(self);
 					}
-					wishListEdit(new WishList());
+					//wishListEdit(new WishList());
 					//reset the self's properties after updating or creating a WishList
 //					self.name(""); 
 //					self.id=0;
 //					self.items.removeAll();
 				}
 				
-				$("#wishListEditDiv").hide();
-				$("#wishListAdmin").show();
+				//$("#wishListEditDiv").hide();
+				//$("#wishListAdmin").show();
 			}
 		});
+	}
+	this.zipperForItem=function(itemID){
+		console.log(itemID)
+		for (var h=0;h<self.zippers().length;h++){
+			console.log(self.zippers()[h].itemId)
+			if (self.zippers()[h].itemId===itemID){
+				console.log("should be here")
+				
+					return self.zippers()[h].purchased;
+			
+			}
+		}
+		
+		self.zippers.push({
+			itemId: itemID,
+			wishlistId: self.id,
+			purchased: ko.observable(false)
+		})
+		console.log("should not be here")
+		//return true;
+		return self.zippers()[self.zippers().length-1].purchased();
+	}
+	
+	
+	this.buyItems=function(){
+		console.log(ko.toJSON(self))
+		$.ajax({
+			url: "/Registry/REST/wishLists/buy",
+			contentType: "application/json",
+			method: "POST",
+			data: ko.toJSON(self),
+			success: function() {
+				for (var i =0; i<purchaseLists().length; i++){
+					if (purchaseLists()[i].id===self.id){
+						purchaseLists()[i]=self;
+						
+						purchaseLists.valueHasMutated();
+						break;
+					}
+				}
+			
+			}
+		})
+			
 	}
 }
 
@@ -137,7 +220,12 @@ function addToWL(data, event) {
 }
 
 function removeFromWL(data, event) {
+	console.log(data);
+	if (!wishListEdit().zipperForItem(data.id)()){
 	wishListEdit().items.remove(data);
+	}
+	else alert ("That item cannot be removed from your list because it has already been purchased")
+	
 }
 
 function checkWishListEditDuplicates(inventoryItem) {
@@ -162,7 +250,15 @@ function cancelWishListPurchase(){
 	$("#purchaseListItemsTable").hide();
 	$("#wishListAdmin").show();
 }
-
+function wishListFromID(wsID){
+	for (var i=0;i<purchaseLists().length;i++){
+		if (purchaseLists()[i].id===wsID){
+			
+			console.log(purchaseLists()[i])
+			return purchaseLists()[i];
+		}
+	}
+}
 //
 //$(document).ready(function() {
 //	
